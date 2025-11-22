@@ -1,0 +1,238 @@
+========================================================
+        JENKINS EMAIL NOTIFICATION COMPLETE GUIDE
+========================================================
+
+This file contains detailed steps to configure
+Jenkins to send email notifications using Gmail.
+
+You can follow this anytime in the future.
+
+--------------------------------------------------------
+1. REQUIREMENTS
+--------------------------------------------------------
+- Gmail account
+- 2-Step Verification enabled in Gmail
+- Jenkins Email Extension Plugin installed
+- 16-digit Gmail App Password (NOT normal password)
+- Jenkins server running
+
+--------------------------------------------------------
+2. CREATE GMAIL APP PASSWORD
+--------------------------------------------------------
+STEP 1: Go to https://myaccount.google.com
+STEP 2: Click "Security"
+STEP 3: Enable "2-Step Verification"
+STEP 4: After enabling, go to:
+        Security → App Passwords
+STEP 5: Select "Other (Custom name)"
+STEP 6: Enter:
+        Jenkins-Email
+STEP 7: Click "Generate"
+STEP 8: Copy the 16-digit password (example):
+        abcd efgh ijkl mnop
+SAVE IT — this will be used inside Jenkins.
+
+--------------------------------------------------------
+3. INSTALL EMAIL EXTENSION PLUGIN IN JENKINS
+--------------------------------------------------------
+STEP 1: Jenkins → Manage Jenkins
+STEP 2: Manage Plugins
+STEP 3: "Available" tab
+STEP 4: Search:
+        Email Extension Plugin
+STEP 5: Install it
+STEP 6: Restart Jenkins if required
+
+--------------------------------------------------------
+4. CONFIGURE GLOBAL EMAIL SETTINGS (VERY IMPORTANT)
+--------------------------------------------------------
+
+Go to:
+    Jenkins Dashboard → Manage Jenkins → Configure System
+
+Scroll down until you see:
+    "E-mail Notification"
+
+Fill EXACTLY like this:
+
+    SMTP Server:
+        smtp.gmail.com
+
+    Use SMTP Authentication:
+        ✔ CHECK THIS BOX
+
+    User Name:
+        your Gmail ID (example: abc@gmail.com)
+
+    Password:
+        paste your 16-digit Gmail App Password
+
+    Use SSL:
+        ✔ CHECK THIS BOX
+
+    SMTP Port:
+        465
+
+    Reply-To Address:
+        your Gmail ID
+
+-----------------------------------------------
+TEST GLOBAL EMAIL SETTINGS
+-----------------------------------------------
+You will see a button:
+
+    "Test configuration by sending test email"
+
+Click it → enter any email → click send.
+
+If correct, you receive a test email.
+
+--------------------------------------------------------
+5. CONFIGURE EXTENDED EMAIL NOTIFICATION
+--------------------------------------------------------
+
+Still inside:
+    Manage Jenkins → Configure System
+
+Scroll further down until you find:
+    "Extended E-mail Notification"
+
+Now fill:
+
+    SMTP Server:
+        smtp.gmail.com
+
+    SMTP Port:
+        465
+
+    Use SSL:
+        ✔ CHECK THIS
+
+    Credentials:
+        Add your Gmail ID + App Password
+        (Click 'Add' → kind: Username/Password)
+
+    Default Content Type:
+        text/html
+
+Click "Save".
+
+--------------------------------------------------------
+6. HOW TO CREATE A JENKINS JOB (REQUIRED BEFORE EMAIL)
+--------------------------------------------------------
+
+STEP 1: Open Jenkins Dashboard
+STEP 2: Click:
+        New Item
+STEP 3: Enter the job name:
+        example: email_test_job
+STEP 4: Select:
+        Freestyle project
+STEP 5: Click:
+        OK
+
+You are now on the job configuration page.
+
+--------------------------------------------------------
+6A. ENABLE EMAIL IN YOUR JENKINS JOB
+--------------------------------------------------------
+
+This controls WHEN email should be sent.
+You must do this for each job.
+
+STEP 1: Open Jenkins Dashboard
+STEP 2: Click your job name (example: email_test_job)
+STEP 3: Click:
+        Configure
+STEP 4: Scroll down to:
+        Post-build Actions
+STEP 5: Click:
+        Add post-build action
+STEP 6: Select:
+        Editable Email Notification
+
+Fill:
+
+A. Project Recipient List:
+        your-email@gmail.com
+
+B. Content Type:
+        text/html
+
+C. Default Subject/Body:
+        (optional – leave empty)
+
+--------------------------------------------------------
+6B. ENABLE EMAIL TRIGGERS (VERY IMPORTANT)
+--------------------------------------------------------
+
+Inside "Editable Email Notification":
+
+STEP 1: Click:
+        Add Trigger
+
+Choose from these options:
+    - Always
+    - Success
+    - Failure
+    - Unstable
+    - Still Failing
+    - Before Build
+
+Recommended:
+    ✔ Success
+    ✔ Failure
+
+STEP 2: Select:
+        Failure → Add
+        Success → Add
+
+STEP 3: Scroll down
+STEP 4: Click:
+        Save
+
+--------------------------------------------------------
+7. TEST EMAIL NOTIFICATIONS
+--------------------------------------------------------
+
+TEST 1: SUCCESS EMAIL
+    - Click:
+          Build Now
+    - Build succeeds
+    - You get a "Build Success" email
+
+TEST 2: FAILURE EMAIL
+    - Add invalid command in build step:
+          abcdefxyz
+    - Build fails
+    - You get a "Build Failure" email
+
+--------------------------------------------------------
+8. CONFIRM EVERYTHING IS WORKING
+--------------------------------------------------------
+
+You must see:
+
+1. Test email works in "Configure System"
+2. Jenkins sends email on SUCCESS
+3. Jenkins sends email on FAILURE
+4. Emails arrive instantly in Gmail
+5. Job configuration shows:
+       Editable Email Notification
+
+--------------------------------------------------------
+9. NOTES
+--------------------------------------------------------
+
+- Webhooks are NOT required for email setup.
+  Email will work even without GitHub.
+
+- Webhooks + email together:
+      GitHub Push → Jenkins Build → Email Sent
+
+- Most common issue is wrong App Password.
+  Must be 16 characters, no spaces.
+
+========================================================
+        END OF JENKINS EMAIL NOTIFICATION GUIDE
+========================================================
