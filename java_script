@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    tools {
+        maven 'MAVEN_HOME'
+    }
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('git repo & clean') {
+            steps {
+                bat "git clone https://github.com/manisai28/se-lab.git"
+                bat "mvn clean -f se-lab/pom.xml"
+            }
+        }
+
+        stage('install') {
+            steps {
+                bat "mvn install -f se-lab/pom.xml"
+            }
+        }
+
+        stage('test') {
+            steps {
+                bat "mvn test -f se-lab/pom.xml"
+            }
+        }
+
+        stage('package') {
+            steps {
+                bat 'mvn package -f se-lab/pom.xml'
+            }
+        }
+    }
+}
