@@ -1,0 +1,179 @@
+# **Overall Deployment Workflow**
+
+To deploy a web application in the cloud:
+
+1. **Create the application and push it to GitHub**
+2. **Create an EC2 virtual machine and connect to it**
+3. **Clone the GitHub project and write a Dockerfile**
+4. **Build the Docker image**
+5. **Run the Docker container on EC2**
+6. **Access the application using the EC2 public IP**
+
+---
+
+# **I. Create Maven Web Java Project and Push to GitHub**
+
+* Create a Maven web project in Eclipse
+* Initialize Git
+* Push the code to GitHub
+
+---
+
+# **II. Create and Launch an EC2 Virtual Machine (Ubuntu)**
+
+AWS EC2 lets you run applications without investing in hardware.
+
+### **Steps to Create Ubuntu Instance**
+
+### **Step 1:** Login to AWS / Canvas account
+
+### **Step 2:**
+
+Go to: **Services → EC2**
+
+### **Step 3:** Choose nearest region
+
+Then click: **Launch Instance**
+
+---
+
+## **Configure EC2 Instance**
+
+### **1. Name**
+
+Give a machine name (example: *ubuntu*).
+
+### **2. AMI**
+
+Select:
+
+* **Ubuntu Server – Free Tier Eligible**
+
+### **3. Architecture**
+
+* **64-bit**
+
+### **4. Instance Type**
+
+* **t2.micro** (Free tier)
+
+### **5. Key Pair**
+
+* Create new key pair
+* Download `.pem` file
+* Store safely (e.g., folder named *AWS*)
+
+### **6. Security Group**
+
+Add inbound rules for:
+
+* **SSH (22)**
+* **HTTP (80)**
+* **HTTPS (443)**
+
+### **7. Storage**
+
+* Default 8GB
+
+### **8. Launch Instance**
+
+### **9. Number of Instances**
+
+* Keep **1**
+
+---
+
+## **Connecting to EC2 Instance**
+
+1. Select your new instance
+2. Click **Connect**
+3. Choose **SSH Client**
+4. Copy the SSH command:
+
+```
+ssh -i "key.pem" ubuntu@<public-ip>
+```
+
+5. Open PowerShell or Git Bash
+6. Navigate to the folder where your key file is stored:
+
+```
+cd path/to/AWS
+```
+
+7. Paste the SSH command to connect.
+
+---
+
+# **III. Setup EC2 & Clone Application**
+
+### **Install Required Software**
+
+Run the following commands:
+
+```
+sudo apt update
+sudo apt-get install docker.io
+sudo apt install git
+sudo apt install nano
+```
+
+---
+
+### **Clone Your GitHub Project**
+
+```
+git clone <your-github-repo-url>
+cd maven-web-java
+```
+
+---
+
+# **IV. Create Dockerfile**
+
+Open Dockerfile:
+
+```
+nano Dockerfile
+```
+
+Add your instructions.
+Save and exit using:
+
+* **CTRL + O**
+* **CTRL + X**
+
+---
+
+# **V. Build Docker Image & Run Application**
+
+### **Step 1: Build Image**
+
+```
+docker build -t <image-name> .
+```
+
+### **Step 2: Check Docker Images**
+
+```
+docker images
+```
+
+### **Step 3: Run Container**
+
+```
+docker run -d --name app-demo -p 6060:8080 <image-name>
+```
+
+### **Step 4: Access App Using Public IP**
+
+Open browser:
+
+```
+http://<EC2-public-IP>:6060
+```
+
+If the page does not load:
+→ Update **Inbound Rules**
+→ Add port **6060** (or the port you mapped)
+
