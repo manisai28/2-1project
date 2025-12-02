@@ -1,0 +1,75 @@
+manisai_w_build:
+
+            Add Build Step -> "Invoke top-level Maven targets"
+                	└── Maven version: MAVEN_HOME
+                	 └── Goals: clean
+
+            Add Build Step -> "Invoke top-level Maven targets"
+                	└── Maven version: MAVEN_HOME
+                	└── Goals: install
+
+           Add Post Build Action -> "Archive the artifacts"
+                   	 └── Files to archive: **/*
+
+           Add Post Build Action -> "Build other projects"
+                    	└── Projects to build: manisai_w_test
+                    	└── Trigger: Only if build is stable
+
+└── Apply and Save
+
+
+
+manisai_w_test:
+
+
+      Build Environment:
+            	     	└── Check: "Delete the workspace before build starts"
+
+      Add Build Step -> "Copy artifacts from another project"
+            	    	└── Project name: manisai_w_build
+            	    	└── Build: Stable build only
+            	    	└── Artifacts to copy: **/*
+
+     Add Build Step -> "Invoke top-level Maven targets"
+           		  └── Maven version: MAVEN_HOME
+            		└── Goals: test
+    
+    Add Post Build Action -> "Archive the artifacts"
+                └── Files to archive: **/*  
+
+    Add Post Build Action -> "Build other projects"
+                	└── Projects to build: manisai_w_deploy
+
+└── Apply and Save
+
+mansiai_w_deploy:
+
+     Build Environment:
+            		└── Check: "Delete the workspace before build starts"
+
+     Add Build Step -> "Copy artifacts from another project"
+            		└── Project name: mansiai_w_test
+            		└── Build: Stable build only
+               	└── Artifacts to copy: **/*
+
+    Add Post Build Action -> "Deploy WAR/EAR to a container"
+
+           └── WAR/EAR File: **/*.war
+           └── Context path: Webpath
+           └── Add container -> Tomcat 9.x remote
+           └── Credentials: Username: admin, Password: 1234(from eclipse and start tomcat server)
+            ── Tomcat URL: https://localhost:8085/ (click on tomacat v9.0 and open for port number http use)
+
+
+ Apply and Save
+
+
+manisai_w_pipe:
+
+       Pipeline Flow:
+               ├── Layout: Based on upstream/downstream relationship
+               ├── Initial job: MavenWeb_Build
+└── Apply and Save
+
+
+
