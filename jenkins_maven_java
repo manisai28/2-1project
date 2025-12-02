@@ -1,0 +1,46 @@
+manisai_build:
+
+          Add Build Step -> "Invoke top-level Maven targets"
+                  	└── Maven version: MAVEN_HOME
+                 		└── Goals: clean
+          Add Build Step -> "Invoke top-level Maven targets"
+                		└── Maven version: MAVEN_HOME
+                		└── Goals: install
+
+          Add Post Build Action -> "Archive the artifacts"
+                    			└── Files to archive: **/*
+
+          Add Post Build Action -> "Build other projects"
+                    			└── Projects to build: manisai_Test
+                    			└── Trigger: Only if build is stable
+└── Apply and Save
+
+
+manisai_test:
+
+        Build Environment:
+            		└── Check: "Delete the workspace before build starts"
+
+
+        Add Build Step -> "Copy artifacts from another project"
+            		└── Project name: manisai_Build
+            		└── Build: Stable build only  
+            		└── Artifacts to copy: **/*
+
+        Add Build Step -> "Invoke top-level Maven targets"
+            		└── Maven version: MAVEN_HOME
+            		└── Goals: test
+            		└── Post-build Actions:
+
+        Add Post Build Action -> "Archive the artifacts"
+                	└── Files to archive: **/*
+└── Apply and Save
+
+
+
+manisai_pipe:
+
+   Pipeline Flow:
+            ├── Layout: Based on upstream/downstream relationship
+            ├── Initial job: maniai_Build
+            └── Apply and Save OK
