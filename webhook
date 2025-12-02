@@ -1,3 +1,36 @@
+
+short 
+
+opeen ngrok.exe from there terminal 
+1) ngrok http 8080(jenkins port)
+2)in repo open webhooks paste payload ul from ngrok temrinal and add at end of url(/github-webhook/),
+  appliaction/json
+3)in jenkins create any new item with git url se_webhooks and enble GitHub hook trigger for GITScm polling in triggers
+4)do chnages and automattically done 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ===========================================
    JENKINS + GITHUB WEBHOOK SETUP GUIDE
    (Using ngrok to expose local Jenkins)
