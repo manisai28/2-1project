@@ -190,7 +190,49 @@ STEP 2: Select:
 STEP 3: Scroll down
 STEP 4: Click:
         Save
+detail steps :
 
+Editable Email Notification
+Project From: bijjalamanisai28@gmail.com
+
+Project Recipient List: bijjalamanisai28@gmail.com
+
+Project Reply-To List: $DEFAULT_REPLYTO
+Content Type: HTML (text/html)
+Default Subject: $DEFAULT_SUBJECT
+Default Content: $DEFAULT_CONTENT
+Attachments: (leave empty)
+Attach Build Log: Do Not Attach Build Log
+Pre-send Script: $DEFAULT_PRESEND_SCRIPT
+Post-send Script: $DEFAULT_POSTSEND_SCRIPT
+Save to Workspace: (unchecked)
+
+Triggers:
+
+Success Trigger
+Send To: Recipient List
+Recipient List: bijjalamanisai28@gmail.com
+
+Reply-To List: $PROJECT_DEFAULT_REPLYTO
+Content Type: HTML (text/html)
+Subject: Jenkins Build Notification - ${BUILD_STATUS}
+Content: This is a Jenkins email test.
+Job: ${JOB_NAME}
+Build: ${BUILD_NUMBER}
+Status: ${BUILD_STATUS}
+Attachments: (leave empty)
+Attach Build Log: Do Not Attach Build Log
+
+Failure Trigger
+Send To: Recipient List
+Recipient List: bijjalamanisai28@gmail.com
+
+Reply-To List: $PROJECT_DEFAULT_REPLYTO
+Content Type: HTML (text/html)
+Subject: $PROJECT_DEFAULT_SUBJECT
+Content: $PROJECT_DEFAULT_CONTENT
+Attachments: (leave empty)
+Attach Build Log: Do Not Attach Build Log
 --------------------------------------------------------
 7. TEST EMAIL NOTIFICATIONS
 --------------------------------------------------------
